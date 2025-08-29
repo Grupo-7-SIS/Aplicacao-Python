@@ -1,0 +1,4 @@
+psutil
+numpy flask requests
+mysql-connector-python
+python-dotenv
