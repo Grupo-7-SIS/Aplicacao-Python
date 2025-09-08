@@ -27,24 +27,6 @@ def selecionar_porcentagem_cpu(calcular, quantos=None):
                     query = "SELECT ram, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM aula_sis.cpu ORDER BY id DESC LIMIT 5;"
                 elif calcular == "3":
                     query = "SELECT disco, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM aula_sis.cpu ORDER BY id DESC LIMIT 5;"
-                elif calcular == "deletar1":
-                    query = "DELETE FROM aula_sis.cpu ORDER BY id ASC LIMIT 1;"
-                    print("Deletando...")
-                    cursor.execute(query)
-                    db.commit()
-                    return None
-                elif calcular == "deletar3":
-                    query = "DELETE FROM aula_sis.cpu ORDER BY id ASC LIMIT 3;"
-                    print("Deletando...")
-                    cursor.execute(query)
-                    db.commit()
-                    return None
-                elif calcular == "deletarEscolha":
-                    query = f"DELETE FROM aula_sis.cpu ORDER BY id ASC LIMIT {quantos};"
-                    print("Deletando...")
-                    cursor.execute(query)
-                    db.commit()
-                    return None
                 elif calcular == "update":
                     query = "UPDATE aula_sis.cpu SET dthora = NOW() WHERE id IN (SELECT id FROM (SELECT id FROM aula_sis.cpu ORDER BY id DESC LIMIT 3) AS temp);"
                     print("Atualizando...")
@@ -115,13 +97,12 @@ def sistema():
         print("| 1 - INSERIR REGISTROS           |")
         print("| 2 - MONITORAMENTO DO SISTEMA    |")
         print("| 3 - ENVIAR FEEDBACK             |")
-        print("| 4 - DELETAR REGISTROS           |")
         print("| 0 - Sair                        |")
         print("|=================================|")
 
         escolha = input("\n Escolha o que deseja ver: ")
 
-        if escolha not in ["0", "1", "2", "3", "4"]:
+        if escolha not in ["0", "1", "2", "3"]:
                     print("⚠️  Opção inválida! Tente novamente.")
                     continue
 
@@ -133,9 +114,6 @@ def sistema():
 
         if escolha == "3":
             feedback()
-
-        if escolha == "4":
-             deletar()
 
         if escolha == "0":
             sair()
@@ -248,44 +226,6 @@ def feedback():
 
     for _ in range(2):
         print("|                                 |")
-
-
-
-
-def deletar():
-    while True:
-        print("|==================================|")
-        print("|       REMOÇÃO DE REGISTROS       |")
-        print("|==================================|")
-        print("| 1 - REMOVER REGISTRO MAIS ANTIGO |")
-        print("| 2 - REMOVER 3 MAIS ANTIGOS       |")
-        print("| 3 - INSIRA QUANTOS DESEJA REMOVER|")
-        print("| 0 - Voltar                       |")
-        print("|==================================|")        
-
-
-        deletar = input("Insira a opção desejada: ")
-
-        if deletar not in ["0", "1", "2", "3"]:
-                    print("⚠️  Opção inválida! Tente novamente.")
-                    continue
-        
-        if deletar == "1":
-            selecionar_porcentagem_cpu("deletar1")
-
-        elif deletar == "2":
-            selecionar_porcentagem_cpu("deletar3")
-
-        elif deletar == "3":
-                quantos = int(input("Digite a quantidade de registros a serem deletados: "))
-                if quantos <= 0:
-                    print("⚠️  Digite um número maior que 0.")
-                    continue
-                selecionar_porcentagem_cpu("deletarEscolha", quantos)    
-
-        if deletar == "0":
-            print("\n Voltando...")
-            break
 
 
          
@@ -416,14 +356,4 @@ def monitoramentoSistema():
             sistema()
              
 
-
-
-
-
-
-
-# e caso queira deletar os ultimos 5 registros, digite 'deletar'. Para apenas atualizar 'update':
-
 sistema()
-
-# hostname = platform.uname()
