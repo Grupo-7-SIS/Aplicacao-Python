@@ -1,4 +1,9 @@
 psutil
-numpy flask requests
 mysql-connector-python
 python-dotenv
+platform
+time
+sys
+os
+datetimap
+requests

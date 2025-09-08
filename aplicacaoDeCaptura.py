@@ -5,13 +5,20 @@ import platform
 import time
 import datetime
 import sys
+import os 
+from dotenv import load_dotenv
+import requests
+import socket
 
-def selecionar_porcentagem_cpu(calcular, quantos=None):
+load_dotenv()
+
+def selecionar_componentes(calcular, quantos=None):
+
     config = {
-        'user': "aluno",
-        'password': "sptech",
-        'host': 'localhost',
-        'database': "aula_sis"
+        'user': os.getenv("USERNAME_DB"),
+        'password': os.getenv("PASSWORD_DB"),
+        'host': os.getenv("HOST_DB"),
+        'database': os.getenv("DATABASE_DB")
     }
 
     try:
@@ -22,20 +29,21 @@ def selecionar_porcentagem_cpu(calcular, quantos=None):
     
             with db.cursor() as cursor: 
                 if calcular == "1":
-                    query = "SELECT porcentagem, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM aula_sis.cpu ORDER BY id DESC LIMIT 5;"
+                    query = "SELECT usoCPU, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM cyberbeef.cpu ORDER BY id DESC LIMIT 5;"
                 elif calcular == "2":
-                    query = "SELECT ram, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM aula_sis.cpu ORDER BY id DESC LIMIT 5;"
+                    query = "SELECT ram, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM cyberbeef.cpu ORDER BY id DESC LIMIT 5;"
                 elif calcular == "3":
-                    query = "SELECT disco, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM aula_sis.cpu ORDER BY id DESC LIMIT 5;"
+                    query = "SELECT disco, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM cyberbeef.cpu ORDER BY id DESC LIMIT 5;"
                 elif calcular == "update":
-                    query = "UPDATE aula_sis.cpu SET dthora = NOW() WHERE id IN (SELECT id FROM (SELECT id FROM aula_sis.cpu ORDER BY id DESC LIMIT 3) AS temp);"
+                    query = "UPDATE cyberbeef.cpu SET dthora = NOW() WHERE id IN (SELECT id FROM (SELECT id FROM cyberbeef.cpu ORDER BY id DESC LIMIT 3) AS temp);"
                     print("Atualizando...")
                     cursor.execute(query)
                     db.commit()
                     return None
                 elif calcular == "4":
-                    query = "SELECT porcentagem, ram, disco, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM aula_sis.cpu ORDER BY id DESC LIMIT 5;"
-                
+                    query = "SELECT usoCPU, ram, disco, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s') FROM cyberbeef.cpu ORDER BY id DESC LIMIT 5;"
+                elif calcular == "5":
+                    query = "SELECT usoCPU, ram, disco, DATE_FORMAT(dthora, '%d/%m/%Y %H:%i:%s'), ip FROM cyberbeef.cpu ORDER BY id DESC LIMIT 5;"
                 if calcular != "deletar":
                     cursor.execute(query)
                     resultado = cursor.fetchall()
@@ -51,13 +59,20 @@ def selecionar_porcentagem_cpu(calcular, quantos=None):
 
 
 
-def insercao(porcentagem, ram, disco, dthoraformat):
+
+"""PARTE 1. Um Script que captura dados de uma máquina do grupo e armazena os dados no banco de dados de um servidor (eleger qual máquina do grupo será o servidor do banco de dados). Além das informações já capturadas, acrescentar a informação sobre o nome ou código da máquina ou do dono da máquina."""
+
+
+
+
+
+def insercao(porcentagem, ram, disco, dthoraformat,ip_local):
 
     config = {
-      'user': "aluno",
-      'password': "sptech",
-      'host': 'localhost',
-      'database': "aula_sis"
+        'user': os.getenv("USERNAME_DB"),
+        'password': os.getenv("PASSWORD_DB"),
+        'host': os.getenv("HOST_DB"),
+        'database': os.getenv("DATABASE_DB")
     }
 
     try:
@@ -67,8 +82,8 @@ def insercao(porcentagem, ram, disco, dthoraformat):
             print('Connected to MySQL server version -', db_info)
             
             with db.cursor() as cursor:
-                query = "INSERT INTO aula_sis.cpu (id, porcentagem, ram, disco, dthora) VALUES (null, %s, %s, %s, %s)"
-                value = (porcentagem, ram, disco, dthoraformat)
+                query = "INSERT INTO cyberbeef.cpu (id, usoCPU, ram, disco, dthora, ip) VALUES (null, %s, %s, %s, %s,%s)"
+                value = (porcentagem, ram, disco, dthoraformat, ip_local)
                 cursor.execute(query, value)
                 
                 db.commit()
@@ -149,7 +164,9 @@ def insercaoDados():
                 dthora = datetime.datetime.now()
                 dthoraformat = dthora.strftime("%Y-%m-%d %H:%M:%S")
 
-                insercao(porcentagem, ram, disco, dthoraformat)
+                ip_local = socket.gethostbyname(socket.gethostname())
+
+                insercao(porcentagem, ram, disco, dthoraformat, ip_local)
 
 
         if intervalo == "2":         
@@ -165,7 +182,10 @@ def insercaoDados():
                     dthora = datetime.datetime.now()
                     dthoraformat = dthora.strftime("%Y-%m-%d %H:%M:%S")
 
-                    insercao(porcentagem, ram, disco, dthoraformat)
+                    ip_local = socket.gethostbyname(socket.gethostname())
+
+
+                    insercao(porcentagem, ram, disco, dthoraformat,ip_local)
 
                     time.sleep(6)
         
@@ -182,7 +202,9 @@ def insercaoDados():
                     dthora = datetime.datetime.now()
                     dthoraformat = dthora.strftime("%Y-%m-%d %H:%M:%S")
 
-                    insercao(porcentagem, ram, disco, dthoraformat)
+                    ip_local = socket.gethostbyname(socket.gethostname())
+                    
+                    insercao(porcentagem, ram, disco, dthoraformat,ip_local)
 
                     time.sleep(3)
 
@@ -201,7 +223,9 @@ def insercaoDados():
                 dthora = datetime.datetime.now()
                 dthoraformat = dthora.strftime("%Y-%m-%d %H:%M:%S")
 
-                insercao(porcentagem, ram, disco, dthoraformat)
+                ip_local = socket.gethostbyname(socket.gethostname())
+
+                insercao(porcentagem, ram, disco, dthoraformat,ip_local)
 
                 time.sleep(60 / tempo)
 
@@ -228,6 +252,10 @@ def feedback():
         print("|                                 |")
 
 
+
+"""PARTE 2. Um Script que consulta o banco de dados e apresenta as informações que o usuário deseja. Fazer um menu para que o usuário escolha as informações que ele deseja visualizar."""
+
+
          
 def monitoramentoSistema():
     while True:
@@ -252,14 +280,15 @@ def monitoramentoSistema():
                 print("| 1 - Ver uso de CPU              |")
                 print("| 2 - Ver uso de RAM              |")
                 print("| 3 - Ver uso de Disco            |")
-                print("| 4 - Ver Todos                   |")
+                print("| 4 - Ver todos os componentes    |")
+                print("| 5 - Ver Todos e o ip            |")
                 print("| 0 - Voltar                      |")
                 print("|=================================|")
 
         
                 calcular = input("\n Insira o que deseja ver: ")
 
-                if calcular not in ["0", "1", "2", "3", "4"]:
+                if calcular not in ["0", "1", "2", "3", "4", "5"]:
                     print("⚠️  Opção inválida! Tente novamente.")
                     continue
 
@@ -267,7 +296,7 @@ def monitoramentoSistema():
                     print("\n Voltando...")
                     break
                     
-                resultado = selecionar_porcentagem_cpu(calcular)
+                resultado = selecionar_componentes(calcular)
 
                 if calcular == "1":
                     print("\n", tabulate(resultado, headers=["CPU EM USO", "DATA DA CAPTURA"], tablefmt="fancy_grid"), "\n")
@@ -284,6 +313,8 @@ def monitoramentoSistema():
                 if calcular == "4":
                     print("\n", tabulate(resultado, headers=["CPU EM USO","RAM EM USO", "DISCO EM USO", "DATA DA CAPTURA"], tablefmt="fancy_grid"), "\n")
 
+                if calcular == "5":
+                     print("\n", tabulate(resultado, headers=["CPU EM USO","RAM EM USO", "DISCO EM USO", "DATA DA CAPTURA", "IP LOCAL"], tablefmt="fancy_grid"), "\n")
                 
 
 
