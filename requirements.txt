@@ -1,9 +1,4 @@
 psutil
 mysql-connector-python
 python-dotenv
-platform
-time
-sys
-os
-datetimap
 requests
