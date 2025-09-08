@@ -57,15 +57,6 @@ def selecionar_componentes(calcular, quantos=None):
             db.close()
 
 
-
-
-
-"""PARTE 1. Um Script que captura dados de uma máquina do grupo e armazena os dados no banco de dados de um servidor (eleger qual máquina do grupo será o servidor do banco de dados). Além das informações já capturadas, acrescentar a informação sobre o nome ou código da máquina ou do dono da máquina."""
-
-
-
-
-
 def insercao(porcentagem, ram, disco, dthoraformat,ip_local):
 
     config = {
@@ -250,10 +241,6 @@ def feedback():
 
     for _ in range(2):
         print("|                                 |")
-
-
-
-"""PARTE 2. Um Script que consulta o banco de dados e apresenta as informações que o usuário deseja. Fazer um menu para que o usuário escolha as informações que ele deseja visualizar."""
 
 
          
