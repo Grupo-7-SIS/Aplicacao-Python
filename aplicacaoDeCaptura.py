@@ -56,7 +56,7 @@ def selecionar_componentes(calcular, quantos=None):
             cursor.close()
             db.close()
 
-
+1
 def insercao(porcentagem, ram, disco, dthoraformat,ip_local):
 
     config = {

@@ -15,10 +15,10 @@ load_dotenv()
 
 def selecionar_componentes(calcular, quantos=None):
     config = {
-        'user': os.getenv("USERNAME_DB"),
-        'password': os.getenv("PASSWORD_DB"),
-        'host': os.getenv("HOST_DB"),
-        'database': os.getenv("DATABASE_DB")
+        'user': 'cyberbeef',
+        'password': 'senha123',
+        'host': '98.81.245.9',
+        'database': 'cyberbeef'
     }
 
     try:
@@ -58,10 +58,10 @@ def selecionar_componentes(calcular, quantos=None):
 
 def insercao(porcentagem, ram, disco, dthoraformat,ip_local):
     config = {
-        'user': os.getenv("USERNAME_DB"),
-        'password': os.getenv("PASSWORD_DB"),
-        'host': os.getenv("HOST_DB"),
-        'database': os.getenv("DATABASE_DB")
+        'user': 'cyberbeef',
+        'password': 'senha123',
+        'host': '98.81.245.9',
+        'database': 'cyberbeef'
     }
 
     try:

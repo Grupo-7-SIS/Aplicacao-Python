@@ -2,3 +2,4 @@ psutil
 mysql-connector-python
 python-dotenv
 requests
+tabulate
