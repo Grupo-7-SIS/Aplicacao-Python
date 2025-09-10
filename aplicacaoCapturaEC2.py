@@ -17,7 +17,7 @@ def selecionar_componentes(calcular, quantos=None):
     config = {
         'user': 'cyberbeef',
         'password': 'senha123',
-        'host': '98.81.245.9',
+        'host': '3.87.107.173',
         'database': 'cyberbeef'
     }
 
@@ -60,7 +60,7 @@ def insercao(porcentagem, ram, disco, dthoraformat,ip_local):
     config = {
         'user': 'cyberbeef',
         'password': 'senha123',
-        'host': '98.81.245.9',
+        'host': '3.87.107.173',
         'database': 'cyberbeef'
     }
 
@@ -126,12 +126,13 @@ def insercaoDados():
         print("| 2 - 10 REGISTROS POR MINUTO     |")
         print("| 3 - 20 REGISTROS POR MINUTO     |")
         print("| 4 - INSIRA NÚMERO DE REGISTROS  |")
+        print("| 5 - REGISTROS CONSTANTES        |")
         print("| 0 - Voltar                      |")
         print("|=================================|")
 
         intervalo = input("\n Insira a opção desejada: ")
 
-        if intervalo not in ["0", "1", "2", "3", "4"]:
+        if intervalo not in ["0", "1", "2", "3", "4","5"]:
                     print("Opção inválida! Tente novamente.")
                     continue
 
@@ -207,6 +208,23 @@ def insercaoDados():
 
                 time.sleep(60 / tempo)
 
+        if intervalo == "5":
+             
+             while True:
+                  porcentagem = p.cpu_percent(interval=1, percpu=False)
+
+                  ram = p.virtual_memory().percent
+
+                  disco = p.disk_usage("/").percent
+
+                  dthora = datetime.datetime.now()
+                  dthoraformat = dthora.strftime("%Y-%m-%d %H:%M:%S")
+
+                  ip_local = socket.gethostbyname(socket.gethostname())
+
+                  insercao(porcentagem, ram, disco, dthoraformat,ip_local)
+
+                                    
         if intervalo == "0":
             print("\n Voltando...")
             break
