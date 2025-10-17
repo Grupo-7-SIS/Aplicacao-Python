@@ -1,14 +1,17 @@
-#!/usr/bin/env python
 import mysql.connector
 from mysql.connector import Error
 import datetime
 import psutil
 import time
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 DB_CONFIG = {
-    'host': 'localhost',
-    'user': 'root',
-    'password': 'senha',
+    'host': os.getenv("HOST_DB"),
+    'user': os.getenv("USERNAME_DB"),
+    'password': os.getenv("PASSWORD_DB"),
     'database': 'cyberbeef',
     'port': 3306
 }
