@@ -1,17 +1,14 @@
+
 import mysql.connector
 from mysql.connector import Error
 import datetime
 import psutil
 import time
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
 
 DB_CONFIG = {
-    'host': os.getenv("HOST_DB"),
-    'user': os.getenv("USERNAME_DB"),
-    'password': os.getenv("PASSWORD_DB"),
+    'host': '3.92.69.138',
+    'user': 'root',
+    'password': '1212',
     'database': 'cyberbeef',
     'port': 3306
 }
@@ -32,7 +29,6 @@ def obter_ou_criar_componente(tipo, unidade, id_maquina):
         return None
     try:
         cursor = db.cursor()
-        # Verifica se o componente já existe
         cursor.execute("""
             SELECT idComponente FROM componente
             WHERE tipoComponente = %s AND idMaquina = %s
@@ -41,7 +37,6 @@ def obter_ou_criar_componente(tipo, unidade, id_maquina):
         if resultado:
             return resultado[0]
 
-        # Insere novo componente
         cursor.execute("""
             INSERT INTO componente (tipoComponente, unidadeMedida, idMaquina)
             VALUES (%s, %s, %s)
@@ -63,11 +58,11 @@ def inserir_leitura(id_componente, id_maquina, valor, tipo, unidade):
         cursor = db.cursor()
         agora = datetime.datetime.now()
         cursor.execute("""
-            INSERT INTO leitura (idComponente, idMaquina, dado, dthCaptura, idNucleo)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (id_componente, id_maquina, valor, agora, None))
+            INSERT INTO leitura (idComponente, idMaquina, dado, dthCaptura)
+            VALUES (%s, %s, %s, %s)
+        """, (id_componente, id_maquina, valor, agora))
         db.commit()
-        print(f"[{agora.strftime('%Y-%m-%d %H:%M:%S')}] Componente: {tipo:<6} | Unidade: {unidade:<3} | Valor: {valor:.2f}")
+        print(f"[{agora.strftime('%Y-%m-%d %H:%M:%S')}] Componente: {tipo:<7} | Unidade: {unidade:<3} | Valor: {valor:.2f}")
     except Error as e:
         print(f"Erro ao inserir leitura: {e}")
     finally:
@@ -86,7 +81,7 @@ def capturar_metricas():
     }
 
 def iniciar_monitoramento():
-    print("Iniciando monitoramento... (Ctrl + C para parar)\n")
+    print("Iniciando monitoramento em tempo real... (Ctrl + C para parar)\n")
     while True:
         metricas = capturar_metricas()
         for (tipo, unidade), valor in metricas.items():
@@ -97,4 +92,3 @@ def iniciar_monitoramento():
 
 if __name__ == "__main__":
     iniciar_monitoramento()
-
