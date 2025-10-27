@@ -6,7 +6,7 @@ import psutil
 import time
 
 DB_CONFIG = {
-    'host': '3.92.69.138',
+    'host': '3.90.33.198',
     'user': 'root',
     'password': '1212',
     'database': 'cyberbeef',
@@ -92,3 +92,4 @@ def iniciar_monitoramento():
 
 if __name__ == "__main__":
     iniciar_monitoramento()
+
